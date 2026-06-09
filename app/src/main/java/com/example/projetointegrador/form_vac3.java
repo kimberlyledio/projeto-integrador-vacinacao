@@ -1,6 +1,6 @@
 package com.example.projetointegrador;
 
-import android.annotation.SuppressLint; // ⚠️ não utilizado — pode remover
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,7 +15,7 @@ import android.widget.Toast;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.JsonArray; // ⚠️ não utilizado diretamente — usado só no parseString
+
 import com.google.gson.JsonParser;
 import com.google.gson.JsonObject;
 
@@ -90,9 +90,11 @@ public class form_vac3 extends AppCompatActivity implements View.OnClickListener
                 return; // interrompe
             }
 
+            String dataProVacTratada = tratarDataParaEnvio(txtData_pro_vac.getText().toString());
+
             // Adiciona os dados desta tela ao objeto Vacina já existente
             vacinaDados.setNome_pro_vac(txtNome_pro_vac.getText().toString().trim());
-            vacinaDados.setData_pro_vac(txtData_pro_vac.getText().toString().trim());
+            vacinaDados.setData_pro_vac(dataProVacTratada);
             vacinaDados.setLembrar(lembrar.isChecked() ? "Sim" : "Não"); // checkbox → texto
             vacinaDados.setAnota_vac(txtAnota_vac.getText().toString().trim());
 
@@ -207,7 +209,7 @@ public class form_vac3 extends AppCompatActivity implements View.OnClickListener
         json.addProperty("Data_pro_vac",   vacinaDados.getData_pro_vac());
         json.addProperty("lembrar",        vacinaDados.getLembrar());
         json.addProperty("Anota_vac",      vacinaDados.getAnota_vac());
-        json.addProperty("status",         "aplicada");
+        json.addProperty("status",         "Aplicada");
 
         RequestBody body = RequestBody.create(
                 json.toString(), MediaType.parse("application/json"));
@@ -253,5 +255,27 @@ public class form_vac3 extends AppCompatActivity implements View.OnClickListener
                 }
             }
         });
+    }
+
+    private String tratarDataParaEnvio(String dataInput) {
+        if (dataInput == null || dataInput.trim().isEmpty()) {
+            return null; // Retorna null legítimo se o usuário não agendar uma próxima vacina
+        }
+
+        String dataLimpa = dataInput.trim();
+
+        // Converte o formato BR (DD/MM/AAAA) para o formato ISO (AAAA-MM-DD)
+        if (dataLimpa.contains("/")) {
+            String[] partes = dataLimpa.split("/");
+            if (partes.length == 3) {
+                String dia = partes[0];
+                String mes = partes[1];
+                String ano = partes[2];
+
+                return ano + "-" + mes + "-" + dia;
+            }
+        }
+
+        return dataLimpa;
     }
 }

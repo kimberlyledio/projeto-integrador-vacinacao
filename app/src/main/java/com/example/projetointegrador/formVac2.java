@@ -13,9 +13,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;        // ⚠️ não utilizado — pode remover
-import androidx.core.view.ViewCompat;         // ⚠️ não utilizado — pode remover
-import androidx.core.view.WindowInsetsCompat; // ⚠️ não utilizado — pode remover
+
 
 public class formVac2 extends AppCompatActivity implements View.OnClickListener {
 
@@ -97,14 +95,16 @@ public class formVac2 extends AppCompatActivity implements View.OnClickListener 
             RadioButton radioSelecionadoVac = findViewById(idSelecionadoVac);
             String dose2 = radioSelecionadoVac.getText().toString();
 
+            String dataValidade = tratarDataParaEnvio(txtData_val.getText().toString());
+            String dataReforco  = tratarDataParaEnvio(txtDataRef.getText().toString());
 
             // .trim() remove espaços extras no início e fim
             vacina.setLote(txtLote.getText().toString().trim());
-            vacina.setData_val(txtData_val.getText().toString().trim());
+            vacina.setData_val(dataValidade);
             vacina.setFabricante(txtFabricante.getText().toString().trim());
             vacina.setDose2(dose2);
             vacina.setNomeRef(txtNomeRef.getText().toString().trim());
-            vacina.setDataRef(txtDataRef.getText().toString().trim());
+            vacina.setDataRef(dataReforco);
             vacina.setObsVac(txtObsVac.getText().toString().trim());
 
             //  Navega para o formVac3 passando os objetos
@@ -129,5 +129,27 @@ public class formVac2 extends AppCompatActivity implements View.OnClickListener 
             startActivity(main);
             finish();
         }
+    }
+    private String tratarDataParaEnvio(String dataInput) {
+        if (dataInput == null || dataInput.trim().isEmpty()) {
+            return null; // O banco de dados interpretará como campo vazio com sucesso
+        }
+
+        String dataLimpa = dataInput.trim();
+
+        // Verifica se a data foi digitada com barras no formato brasileiro (ex: 20/07/2025)
+        if (dataLimpa.contains("/")) {
+            String[] partes = dataLimpa.split("/");
+            if (partes.length == 3) {
+                String dia = partes[0];
+                String mes = partes[1];
+                String ano = partes[2];
+
+                // Remonta no formato do banco: AAAA-MM-DD
+                return ano + "-" + mes + "-" + dia;
+            }
+        }
+
+        return dataLimpa;
     }
 }

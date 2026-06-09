@@ -13,7 +13,6 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonObject; // ⚠️ import não utilizado — pode remover
 import com.google.gson.JsonParser;
 
 import java.io.IOException;

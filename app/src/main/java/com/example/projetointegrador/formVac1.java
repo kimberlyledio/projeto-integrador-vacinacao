@@ -3,21 +3,19 @@ package com.example.projetointegrador;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ArrayAdapter; // ⚠️ não utilizado — pode remover
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
-import android.widget.Spinner;      // ⚠️ não utilizado — pode remover
+
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;        // ⚠️ não utilizado — pode remover
-import androidx.core.view.ViewCompat;         // ⚠️ não utilizado — pode remover
-import androidx.core.view.WindowInsetsCompat; // ⚠️ não utilizado — pode remover
+
 
 public class formVac1 extends AppCompatActivity implements View.OnClickListener {
 
@@ -78,11 +76,15 @@ public class formVac1 extends AppCompatActivity implements View.OnClickListener 
 
 
             String nome_vacina    = txtNome_vacina.getText().toString().trim();
-            String Data_aplicacao = txtData_aplicacao.getText().toString().trim();
-            String Hora_aplicacao = txtHora_aplicacao.getText().toString().trim();
             String Nome_vet       = txtNome_vet.getText().toString().trim();
             String CRMV_vet       = txtCRMV_vet.getText().toString().trim();
 
+            String data_aplicacao = tratarDataParaEnvio(txtData_aplicacao.getText().toString());
+            String hora_aplicacao = txtHora_aplicacao.getText().toString().trim();
+
+            if (hora_aplicacao.isEmpty()) {
+                hora_aplicacao = null;
+            }
 
             if (nome_vacina.isEmpty()) {
                 txtNome_vacina.setError("Campo obrigatório");
@@ -104,7 +106,7 @@ public class formVac1 extends AppCompatActivity implements View.OnClickListener 
 
             // Cria o objeto Vacina com os dados desta tela
             // Os campos do form2 e form3 serão adicionados nas próximas telas
-            Vacina vacina = new Vacina(nome_vacina, dose, Data_aplicacao, Hora_aplicacao, Nome_vet, CRMV_vet);
+            Vacina vacina = new Vacina(nome_vacina, dose, data_aplicacao, hora_aplicacao, Nome_vet, CRMV_vet);
 
             // Navega para o formVac2 passando os objetos
             Intent intent = new Intent(this, formVac2.class);
@@ -128,5 +130,27 @@ public class formVac1 extends AppCompatActivity implements View.OnClickListener 
             startActivity(main);
             finish();
         }
+    }
+
+    private String tratarDataParaEnvio(String dataInput) {
+        if (dataInput == null || dataInput.trim().isEmpty()) {
+            return null; // Envia NULL legítimo se o campo estiver vazio
+        }
+
+        String dataLimpa = dataInput.trim();
+
+        // Transforma o formato BR (DD/MM/AAAA) para o formato do banco (AAAA-MM-DD)
+        if (dataLimpa.contains("/")) {
+            String[] partes = dataLimpa.split("/");
+            if (partes.length == 3) {
+                String dia = partes[0];
+                String mes = partes[1];
+                String ano = partes[2];
+
+                return ano + "-" + mes + "-" + dia;
+            }
+        }
+
+        return dataLimpa;
     }
 }

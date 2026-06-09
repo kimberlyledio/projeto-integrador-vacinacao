@@ -99,7 +99,7 @@
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <!-- Nome -->
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
 
                 </RadioGroup>
 
-                <!-- Idade -->
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -185,9 +185,8 @@
                     android:layout_marginBottom="12dp"
                     android:background="@drawable/customiza_campo"
                     android:ems="10"
-                    android:hint="Digite o horario da vacina"
+                    android:hint="00:00:00"
                     android:inputType="time"
-                    android:maxLength="2"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:textSize="14sp" />
@@ -206,7 +205,6 @@
                     android:ems="10"
                     android:hint="Digite o nome completo do veterinário"
                     android:inputType="textPersonName"
-                    android:maxLength="2"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:textSize="14sp" />
@@ -215,7 +213,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
-                    android:text="CRM" />
+                    android:text="CRMV" />
 
                 <EditText
                     android:id="@+id/txtCRMV_vet"
@@ -224,9 +222,8 @@
                     android:layout_marginBottom="12dp"
                     android:background="@drawable/customiza_campo"
                     android:ems="10"
-                    android:hint="Digite o CRM do veterinário"
+                    android:hint="Digite o CRMV do veterinário"
                     android:inputType="number"
-                    android:maxLength="2"
                     android:paddingStart="12dp"
                     android:paddingEnd="12dp"
                     android:textSize="14sp" />

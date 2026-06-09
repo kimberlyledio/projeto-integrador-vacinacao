@@ -107,26 +107,32 @@ public class VacinasPetActivity extends AppCompatActivity {
 
                             if (obj.has("vacinas") && !obj.get("vacinas").isJsonNull()) {
                                 JsonObject vacObj = obj.get("vacinas").getAsJsonObject();
-                                v.setNomeVac(vacObj.has("nome_vacina") ? vacObj.get("nome_vacina").getAsString() : "");
+                                if (vacObj.has("nome_vacina") && !vacObj.get("nome_vacina").isJsonNull()) {
+                                    v.setNomeVac(vacObj.get("nome_vacina").getAsString());
+                                } else {
+                                    v.setNomeVac("Vacina sem nome");
+                                }
+                            } else {
+                                v.setNomeVac("Vacina não identificada");
                             }
 
 
-                            v.setDose(obj.has("dose") ? obj.get("dose").getAsString() : "");
-                            v.setData_aplicacao(obj.has("Data_aplicacao") ? obj.get("Data_aplicacao").getAsString() : "");
-                            v.setHora_aplicacao(obj.has("Hora_aplicacao") ? obj.get("Hora_aplicacao").getAsString() : "");
-                            v.setNome_vet(obj.has("Nome_vet") ? obj.get("Nome_vet").getAsString() : "");
-                            v.setCRMV_vet(obj.has("CRMV_vet") ? obj.get("CRMV_vet").getAsString() : "");
-                            v.setLote(obj.has("Lote") ? obj.get("Lote").getAsString():"");
-                            v.setData_val(obj.has("Data_val") ? obj.get("Data_val").getAsString():"");
-                            v.setFabricante(obj.has("Fabricante") ? obj.get("Fabricante").getAsString():"");
-                            v.setDose2(obj.has("dose2") ? obj.get("dose2").getAsString():"");
-                            v.setNomeRef(obj.has("NomeRef") ? obj.get("NomeRef").getAsString():"");
-                            v.setDataRef(obj.has("DataRef") ? obj.get("DataRef").getAsString():"");
-                            v.setObsVac(obj.has("ObsVac") ? obj.get("ObsVac").getAsString():"");
-                            v.setNome_pro_vac(obj.has("Nome_pro_vac") ? obj.get("Nome_pro_vac").getAsString():"");
-                            v.setData_pro_vac(obj.has("Data_pro_vac") ? obj.get("Data_pro_vac").getAsString():"");
-                            v.setLembrar(obj.has("lembrar") ? obj.get("lembrar").getAsString():"");
-                            v.setAnota_vac(obj.has("Anota_vac") ? obj.get("Anota_vac").getAsString():"");
+                            v.setDose(obterTextoValido(obj, "dose"));
+                            v.setData_aplicacao(obterTextoValido(obj, "Data_aplicacao"));
+                            v.setHora_aplicacao(obterTextoValido(obj, "Hora_aplicacao"));
+                            v.setNome_vet(obterTextoValido(obj, "Nome_vet"));
+                            v.setCRMV_vet(obterTextoValido(obj, "CRMV_vet"));
+                            v.setLote(obterTextoValido(obj, "Lote"));
+                            v.setData_val(obterTextoValido(obj, "Data_val"));
+                            v.setFabricante(obterTextoValido(obj, "Fabricante"));
+                            v.setDose2(obterTextoValido(obj, "dose2"));
+                            v.setNomeRef(obterTextoValido(obj, "NomeRef"));
+                            v.setDataRef(obterTextoValido(obj, "DataRef"));
+                            v.setObsVac(obterTextoValido(obj, "ObsVac"));
+                            v.setNome_pro_vac(obterTextoValido(obj, "Nome_pro_vac"));
+                            v.setData_pro_vac(obterTextoValido(obj, "Data_pro_vac"));
+                            v.setLembrar(obterTextoValido(obj, "lembrar"));
+                            v.setAnota_vac(obterTextoValido(obj, "Anota_vac"));
 
                             if (obj.has("id_registro") && !obj.get("id_registro").isJsonNull()) {
                                 v.setId_vacina(obj.get("id_registro").getAsInt());
@@ -136,11 +142,14 @@ public class VacinasPetActivity extends AppCompatActivity {
                         }
 
                     } catch (Exception e) {
+                        e.printStackTrace();
                         TextView tv = new TextView(VacinasPetActivity.this);
-                        tv.setText("Erro ao carregar vacinas.");
+                        tv.setText("Erro técnico: " + e.getMessage());
                         tv.setPadding(40, 20, 40, 20);
                         containerVacinas.addView(tv);
                     }
+
+
                 });
             }
         });
@@ -164,5 +173,11 @@ public class VacinasPetActivity extends AppCompatActivity {
         });
 
         containerVacinas.addView(cardView);
+    }
+    private String obterTextoValido(JsonObject obj, String chave) {
+        if (obj.has(chave) && !obj.get(chave).isJsonNull()) {
+            return obj.get(chave).getAsString();
+        }
+        return ""; // Retorna string vazia caso o campo seja nulo ou não exista
     }
 }
